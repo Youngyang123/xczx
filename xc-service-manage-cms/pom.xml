@@ -57,5 +57,34 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <!--这是原有的spring boot插件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.13</version>
+                <configuration>
+                    <!--<imageName>39.106.124.209:5000/${project.artifactId}</imageName>-->
+                    <imageName>${project.artifactId}</imageName>
+                    <baseImage>centos-jdk1.8</baseImage>
+                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                    <dockerHost>http://39.106.124.209:2375</dockerHost>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
