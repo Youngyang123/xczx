@@ -24,6 +24,7 @@ public class UploadController {
         String originalFilename = file.getOriginalFilename();
         String fileName = IDUtils.genImageName() + originalFilename.substring(originalFilename.lastIndexOf("."));
         String host = "106.54.95.152";
+        // 上传文件
         FtpUtil.uploadFile(host, 21, "ftpuser",
                 "123456", "/home/ftpuser", "/", fileName, file.getInputStream());
         String imageUrl = "http://" + host  + "/" + fileName;
