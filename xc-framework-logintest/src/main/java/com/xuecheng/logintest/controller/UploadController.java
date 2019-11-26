@@ -4,6 +4,7 @@ import com.xuecheng.framework.model.response.ObjectResponse;
 import com.xuecheng.logintest.utils.FtpUtil;
 import com.xuecheng.logintest.utils.IDUtils;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,18 +16,18 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("images")
+@CrossOrigin
 public class UploadController {
 
     @PostMapping("posts")
     public ObjectResponse<String> upload(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
-        String fileName = IDUtils.genImageName() + originalFilename.substring(originalFilename.lastIndexOf("\\."));
+        String fileName = IDUtils.genImageName() + originalFilename.substring(originalFilename.lastIndexOf("."));
         String host = "106.54.95.152";
-        int port = 80;
-        FtpUtil.uploadFile(host, port, "ftpuser",
-                "123456", "/home/ftpuser", "/images", fileName, file.getInputStream());
-        String imageUrl = "http://" + host + port + "/images/" + fileName;
-        return new ObjectResponse<>(20000, "上传成功", imageUrl);
+        FtpUtil.uploadFile(host, 21, "ftpuser",
+                "123456", "/home/ftpuser", "/", fileName, file.getInputStream());
+        String imageUrl = "http://" + host  + "/" + fileName;
+        return new ObjectResponse<>(10000, "上传成功", imageUrl);
 
 
 
